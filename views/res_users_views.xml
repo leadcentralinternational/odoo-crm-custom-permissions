@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_users_form_crm_custom" model="ir.ui.view">
+        <field name="name">res.users.form.crm.custom</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="CRM Custom Permissions" name="crm_custom_permissions">
+                    <group string="Configuration">
+                        <field name="crm_custom_permissions_enabled"/>
+                    </group>
+                    <group string="Permissions Checklist" invisible="not crm_custom_permissions_enabled">
+                        <group string="Operations">
+                            <field name="crm_lead_view_rule" required="crm_custom_permissions_enabled"/>
+                            <field name="crm_lead_can_edit"/>
+                            <field name="crm_lead_can_delete"/>
+                        </group>
+                        <group string="Scopes">
+                            <field name="crm_allowed_team_ids" widget="many2many_tags" placeholder="Select allowed teams..."/>
+                            <field name="crm_allowed_stage_ids" widget="many2many_tags" placeholder="Select allowed stages..."/>
+                        </group>
+                        <group string="Admin Options">
+                            <field name="crm_admin_options_enabled"/>
+                            <field name="crm_show_menu_sales" invisible="not crm_admin_options_enabled"/>
+                            <field name="crm_show_menu_report" invisible="not crm_admin_options_enabled"/>
+                            <field name="crm_show_menu_config" invisible="not crm_admin_options_enabled"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>
