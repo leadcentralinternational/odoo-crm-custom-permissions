@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
-from odoo import api, models
+from odoo import models
 
 class IrUiMenu(models.Model):
     _inherit = 'ir.ui.menu'
 
-    @api.model
-    def _filter_visible_menus(self, menus):
-        # Call super first to get default visible menus
-        menus = super(IrUiMenu, self)._filter_visible_menus(menus)
+    def _filter_visible_menus(self):
+        # Odoo 18 calls this method on the menu recordset without arguments.
+        menus = super()._filter_visible_menus()
         
         user = self.env.user
         # System administrators bypass custom menu restrictions
