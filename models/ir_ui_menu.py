@@ -14,6 +14,7 @@ class IrUiMenu(models.Model):
             crm_sales_menu = self.env.ref('crm.crm_menu_sales', raise_if_not_found=False)
             crm_report_menu = self.env.ref('crm.crm_menu_report', raise_if_not_found=False)
             crm_config_menu = self.env.ref('crm.crm_menu_config', raise_if_not_found=False)
+            crm_pipeline_menu = self.env.ref('crm.menu_crm_opportunities', raise_if_not_found=False)
 
             exclude_menus = self.env['ir.ui.menu']
 
@@ -23,12 +24,16 @@ class IrUiMenu(models.Model):
 
             # 2. Check CRM submenus based on Admin Options
             if user.crm_admin_options_enabled:
-                if crm_sales_menu and not user.crm_show_menu_sales:
-                    exclude_menus |= crm_sales_menu
                 if crm_report_menu and not user.crm_show_menu_report:
                     exclude_menus |= crm_report_menu
                 if crm_config_menu and not user.crm_show_menu_config:
                     exclude_menus |= crm_config_menu
+                if crm_sales_menu and not user.crm_show_menu_sales:
+                    # Exclude extra submenus of Sales BUT keep My Pipeline (crm_pipeline_menu)
+                    sales_subs = self.env['ir.ui.menu'].search([('parent_id', '=', crm_sales_menu.id)])
+                    for sub in sales_subs:
+                        if crm_pipeline_menu and sub != crm_pipeline_menu:
+                            exclude_menus |= sub
             else:
                 # If Admin Options is disabled, hide Configuration menu by default
                 if crm_config_menu:
@@ -36,6 +41,9 @@ class IrUiMenu(models.Model):
 
             if exclude_menus:
                 def is_excluded(menu):
+                    # Never exclude the main CRM Pipeline menu
+                    if crm_pipeline_menu and menu == crm_pipeline_menu:
+                        return False
                     current = menu
                     while current:
                         if current in exclude_menus:
