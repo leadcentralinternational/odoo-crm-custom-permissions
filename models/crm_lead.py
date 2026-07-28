@@ -7,6 +7,12 @@ class CrmLead(models.Model):
     _inherit = 'crm.lead'
 
     @api.model
+    def _get_view_cache_key(self, view_id=None, view_type='form', **options):
+        key = super()._get_view_cache_key(view_id=view_id, view_type=view_type, **options)
+        user = self.env.user
+        return key + (user.crm_custom_permissions_enabled, user.crm_can_create_stages)
+
+    @api.model
     def _get_view(self, view_id=None, view_type='form', **options):
         arch, view = super()._get_view(view_id=view_id, view_type=view_type, **options)
         user = self.env.user
@@ -26,7 +32,7 @@ class CrmLead(models.Model):
                 custom_domain = ['|', ('user_id', '=', user.id), ('create_uid', '=', user.id)]
             elif user.crm_lead_view_rule == 'team':
                 # Allow leads belonging to user's assigned teams OR leads they are responsible for/created
-                user_teams = self.env['crm.team'].search(['|', ('user_id', '=', user.id), ('member_ids', 'in', user.id)])
+                user_teams = self.env['crm.team'].search(['|', ('user_id', '=', user.id), ('member_ids', 'in', [user.id])])
                 custom_domain = [
                     '|', ('team_id', 'in', user_teams.ids),
                     '|', ('user_id', '=', user.id), ('create_uid', '=', user.id)
