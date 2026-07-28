@@ -5,6 +5,9 @@ class IrUiMenu(models.Model):
     _inherit = 'ir.ui.menu'
 
     def _filter_visible_menus(self):
+        if self.env.context.get('skip_custom_crm_filter'):
+            return super(IrUiMenu, self)._filter_visible_menus()
+
         user = self.env.user
         
         # System administrators bypass custom menu restrictions
@@ -43,16 +46,18 @@ class IrUiMenu(models.Model):
                     current = current.parent_id
                 return False
 
+            menu_env = self.with_context(skip_custom_crm_filter=True)
+
             candidate_menus = self
             if crm_app_menu:
-                crm_branch = self.search([('id', 'child_of', crm_app_menu.id)])
+                crm_branch = menu_env.search([('id', 'child_of', crm_app_menu.id)])
                 candidate_menus = candidate_menus | crm_branch
 
             visible_menus = super(IrUiMenu, candidate_menus)._filter_visible_menus()
 
             # Re-include CRM Configuration branch if explicitly allowed in Admin Options
             if crm_app_menu and user.crm_admin_options_enabled and user.crm_show_menu_config and crm_config_menu:
-                config_branch = self.search([('id', 'child_of', crm_config_menu.id)])
+                config_branch = menu_env.search([('id', 'child_of', crm_config_menu.id)])
                 visible_menus |= config_branch
 
             # Always ensure CRM root app menu is visible if custom permissions are enabled
