@@ -46,19 +46,19 @@ class ResUsers(models.Model):
         help='If checked, allows filtering access to CRM submenus (Sales, Reporting, Configuration).'
     )
     crm_show_menu_sales = fields.Boolean(
-        string='Sales',
+        string='CRM Pipeline / Sales Submenu',
         default=True,
-        help='Check to show the Sales/Pipeline menu in CRM.'
+        help='Check to show the Sales/Pipeline menu inside CRM (My Pipeline, Leads, etc.).'
     )
     crm_show_menu_report = fields.Boolean(
-        string='Reporting',
+        string='CRM Reporting Submenu',
         default=True,
-        help='Check to show the Reporting menu in CRM.'
+        help='Check to show the Reporting menu inside CRM.'
     )
     crm_show_menu_config = fields.Boolean(
-        string='Configuration',
+        string='CRM Configuration Submenu',
         default=True,
-        help='Check to show the Configuration menu in CRM.'
+        help='Check to show the Configuration menu inside CRM.'
     )
 
     def _ensure_crm_base_group(self, vals):

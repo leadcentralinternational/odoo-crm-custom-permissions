@@ -20,11 +20,11 @@
                         <group string="Scopes">
                             <field name="crm_allowed_stage_ids" widget="many2many_tags" placeholder="Select allowed stages..."/>
                         </group>
-                        <group string="Admin Options">
+                        <group string="Admin Options (CRM Submenus)">
                             <field name="crm_admin_options_enabled"/>
-                            <field name="crm_show_menu_sales" invisible="not crm_admin_options_enabled"/>
-                            <field name="crm_show_menu_report" invisible="not crm_admin_options_enabled"/>
-                            <field name="crm_show_menu_config" invisible="not crm_admin_options_enabled"/>
+                            <field name="crm_show_menu_sales" string="Show CRM Pipeline / Sales Submenu" invisible="not crm_admin_options_enabled"/>
+                            <field name="crm_show_menu_report" string="Show CRM Reporting Submenu" invisible="not crm_admin_options_enabled"/>
+                            <field name="crm_show_menu_config" string="Show CRM Configuration Submenu" invisible="not crm_admin_options_enabled"/>
                         </group>
                     </group>
                 </page>
