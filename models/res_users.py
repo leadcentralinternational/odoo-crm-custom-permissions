@@ -62,6 +62,11 @@ class ResUsers(models.Model):
     )
 
     def _ensure_crm_base_group(self, vals):
+        # Enable multi-team membership natively in Odoo
+        ICPSudo = self.env['ir.config_parameter'].sudo()
+        if not ICPSudo.get_param('sales_team.membership_multi'):
+            ICPSudo.set_param('sales_team.membership_multi', 'True')
+
         group_salesman = self.env.ref('sales_team.group_sale_salesman', raise_if_not_found=False)
         if not group_salesman:
             return
