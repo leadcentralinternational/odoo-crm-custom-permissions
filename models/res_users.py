@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from odoo import models, fields
+from odoo import api, fields, models
 
 class ResUsers(models.Model):
     _inherit = 'res.users'
@@ -11,7 +11,7 @@ class ResUsers(models.Model):
     )
     crm_lead_view_rule = fields.Selection([
         ('own', 'Only Own Leads (Created or Assigned)'),
-        ('team', 'Only Leads belonging to Selected Teams'),
+        ('team', 'Only Leads belonging to Assigned Teams'),
         ('all', 'All CRM Leads')
     ], string='Lead Visibility Level', default='all', help='Defines what leads this user is allowed to search and view.')
     
@@ -25,13 +25,10 @@ class ResUsers(models.Model):
         default=False,
         help='Check to allow this user to delete CRM leads.'
     )
-    crm_allowed_team_ids = fields.Many2many(
-        'crm.team',
-        'res_users_crm_team_rel',
-        'user_id',
-        'team_id',
-        string='Allowed CRM Teams',
-        help='CRM teams this user is allowed to access leads from.'
+    crm_can_create_stages = fields.Boolean(
+        string='Can Create Stages',
+        default=False,
+        help='Check to allow this user to create CRM stages and see the + Stage option.'
     )
     crm_allowed_stage_ids = fields.Many2many(
         'crm.stage',
@@ -63,3 +60,27 @@ class ResUsers(models.Model):
         default=True,
         help='Check to show the Configuration menu in CRM.'
     )
+
+    def _ensure_crm_base_group(self, vals):
+        group_salesman = self.env.ref('sales_team.group_sale_salesman', raise_if_not_found=False)
+        if not group_salesman:
+            return
+        for user in self:
+            enabled = vals.get('crm_custom_permissions_enabled', user.crm_custom_permissions_enabled)
+            if enabled and group_salesman not in user.groups_id:
+                user.sudo().write({'groups_id': [(4, group_salesman.id)]})
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        users = super().create(vals_list)
+        for user, vals in zip(users, vals_list):
+            if vals.get('crm_custom_permissions_enabled'):
+                user._ensure_crm_base_group(vals)
+        return users
+
+    def write(self, vals):
+        res = super().write(vals)
+        if 'crm_custom_permissions_enabled' in vals:
+            self._ensure_crm_base_group(vals)
+        return res
+

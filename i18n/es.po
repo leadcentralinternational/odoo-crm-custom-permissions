@@ -42,9 +42,9 @@ msgid "Can Delete CRM Leads"
 msgstr "Puede Eliminar Leads de CRM"
 
 #. module: crm_custom_permissions
-#: model:ir.model.fields,field_description:crm_custom_permissions.field_res_users__crm_allowed_team_ids
-msgid "Allowed CRM Teams"
-msgstr "Equipos de CRM Permitidos"
+#: model:ir.model.fields,field_description:crm_custom_permissions.field_res_users__crm_can_create_stages
+msgid "Can Create Stages"
+msgstr "Puede Crear Etapas"
 
 #. module: crm_custom_permissions
 #: model:ir.model.fields,field_description:crm_custom_permissions.field_res_users__crm_allowed_stage_ids

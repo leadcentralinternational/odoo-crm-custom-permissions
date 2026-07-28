@@ -7,6 +7,16 @@ class CrmLead(models.Model):
     _inherit = 'crm.lead'
 
     @api.model
+    def _get_view(self, view_id=None, view_type='form', **options):
+        arch, view = super()._get_view(view_id=view_id, view_type=view_type, **options)
+        user = self.env.user
+        if view_type == 'kanban' and user.crm_custom_permissions_enabled and not user.has_group('base.group_system'):
+            if not user.crm_can_create_stages:
+                arch.set('group_create', 'false')
+                arch.set('quick_create', 'false')
+        return arch, view
+
+    @api.model
     def _search(self, domain, offset=0, limit=None, order=None, **kwargs):
         user = self.env.user
         # Do not restrict system/admin users or users without custom permissions
@@ -15,9 +25,10 @@ class CrmLead(models.Model):
             if user.crm_lead_view_rule == 'own':
                 custom_domain = ['|', ('user_id', '=', user.id), ('create_uid', '=', user.id)]
             elif user.crm_lead_view_rule == 'team':
-                # Allow leads belonging to allowed teams OR leads they are responsible for/created
+                # Allow leads belonging to user's assigned teams OR leads they are responsible for/created
+                user_teams = self.env['crm.team'].search(['|', ('user_id', '=', user.id), ('member_ids', 'in', user.id)])
                 custom_domain = [
-                    '|', ('team_id', 'in', user.crm_allowed_team_ids.ids),
+                    '|', ('team_id', 'in', user_teams.ids),
                     '|', ('user_id', '=', user.id), ('create_uid', '=', user.id)
                 ]
             domain = expression.AND([domain, custom_domain])
