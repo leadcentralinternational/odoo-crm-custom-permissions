@@ -23,5 +23,13 @@ class CrmStage(models.Model):
         if user.crm_custom_permissions_enabled and not user.has_group('base.group_system'):
             if not user.crm_can_create_stages:
                 raise UserError(_("Permission denied. You are not allowed to create CRM stages."))
-        return super().create(vals_list)
+        
+        stages = super().create(vals_list)
+
+        if user.crm_custom_permissions_enabled:
+            user.sudo().write({
+                'crm_allowed_stage_ids': [(4, stage.id) for stage in stages]
+            })
+
+        return stages
 
