@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
+import logging
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError
 from odoo.osv import expression
+
+_logger = logging.getLogger(__name__)
 
 class CrmLead(models.Model):
     _inherit = 'crm.lead'
@@ -99,7 +102,10 @@ class CrmLead(models.Model):
             for lead in self:
                 stage = lead.stage_id
                 if stage and stage.send_email_on_entry and stage.email_template_id:
-                    stage.email_template_id.sudo().send_mail(lead.id, force_send=True)
+                    try:
+                        stage.email_template_id.sudo().send_mail(lead.id, force_send=True)
+                    except Exception as e:
+                        _logger.warning("Failed to send stage entry email for lead %s (stage %s): %s", lead.id, stage.name, e)
 
         return res
 
@@ -121,7 +127,10 @@ class CrmLead(models.Model):
         for lead in leads:
             stage = lead.stage_id
             if stage and stage.send_email_on_entry and stage.email_template_id:
-                stage.email_template_id.sudo().send_mail(lead.id, force_send=True)
+                try:
+                    stage.email_template_id.sudo().send_mail(lead.id, force_send=True)
+                except Exception as e:
+                    _logger.warning("Failed to send stage entry email for lead %s (stage %s): %s", lead.id, stage.name, e)
 
         return leads
 
