@@ -16,10 +16,29 @@ class CrmLead(models.Model):
     def _get_view(self, view_id=None, view_type='form', **options):
         arch, view = super()._get_view(view_id=view_id, view_type=view_type, **options)
         user = self.env.user
-        if view_type == 'kanban' and user.crm_custom_permissions_enabled and not user.has_group('base.group_system'):
-            if not user.crm_can_create_stages:
-                arch.set('group_create', 'false')
-                arch.set('quick_create', 'false')
+        if user.crm_custom_permissions_enabled and not user.has_group('base.group_system'):
+            if view_type == 'kanban':
+                if not user.crm_can_create_stages:
+                    arch.set('group_create', 'false')
+                    arch.set('quick_create', 'false')
+                for node in arch.xpath("//field[@name='expected_revenue'] | //field[@name='partner_id'] | //field[@name='recurring_revenue'] | //field[@name='recurring_plan']"):
+                    node.set('invisible', '1')
+            elif view_type == 'form':
+                fields_to_hide = {
+                    'partner_id', 'email_from', 'phone', 'mobile',
+                    'expected_revenue', 'probability', 'recurring_revenue',
+                    'recurring_plan', 'automated_probability'
+                }
+                for field_node in arch.xpath("//field"):
+                    if field_node.get('name') in fields_to_hide:
+                        field_node.set('invisible', '1')
+                for label_node in arch.xpath("//label[@for='expected_revenue'] | //label[@for='probability']"):
+                    label_node.set('invisible', '1')
+                for h2 in arch.xpath("//h2"):
+                    if h2.xpath(".//field[@name='expected_revenue']") or h2.xpath(".//field[@name='probability']"):
+                        h2.set('invisible', '1')
+                for node in arch.xpath("//div[@id='probability'] | //button[@name='action_set_automated_probability']"):
+                    node.set('invisible', '1')
         return arch, view
 
     @api.model
