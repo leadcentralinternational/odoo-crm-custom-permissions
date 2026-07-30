@@ -12,6 +12,24 @@ class ResPartner(models.Model):
     )
 
     @api.model
+    def default_get(self, fields_list):
+        res = super().default_get(fields_list)
+        user = self.env.user
+        if not self.env.su and user.crm_custom_permissions_enabled and not user.has_group('base.group_system'):
+            if 'x_is_lead_prospect' in fields_list or not fields_list:
+                res['x_is_lead_prospect'] = True
+        return res
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        user = self.env.user
+        if not self.env.su and user.crm_custom_permissions_enabled and not user.has_group('base.group_system'):
+            for vals in vals_list:
+                if 'x_is_lead_prospect' not in vals:
+                    vals['x_is_lead_prospect'] = True
+        return super().create(vals_list)
+
+    @api.model
     def _get_view(self, view_id=None, view_type='form', **options):
         arch, view = super()._get_view(view_id=view_id, view_type=view_type, **options)
         user = self.env.user
