@@ -9,13 +9,13 @@ _logger = logging.getLogger(__name__)
 class CrmLead(models.Model):
     _inherit = 'crm.lead'
 
-    x_prospect_name = fields.Char(string="Nombre del Prospecto")
-    x_prospect_phone = fields.Char(string="Teléfono")
-    x_prospect_mobile = fields.Char(string="Celular")
-    x_prospect_email = fields.Char(string="Correo Electrónico")
-    x_prospect_street = fields.Char(string="Dirección")
-    x_prospect_city = fields.Char(string="Ciudad")
-    x_prospect_notes = fields.Text(string="Notas del Prospecto")
+    x_prospect_name = fields.Char(string="Prospect Name")
+    x_prospect_phone = fields.Char(string="Phone")
+    x_prospect_mobile = fields.Char(string="Mobile")
+    x_prospect_email = fields.Char(string="Email")
+    x_prospect_street = fields.Char(string="Address")
+    x_prospect_city = fields.Char(string="City")
+    x_prospect_notes = fields.Text(string="Prospect Notes")
 
     @api.model
     def _get_view_cache_key(self, view_id=None, view_type='form', **options):

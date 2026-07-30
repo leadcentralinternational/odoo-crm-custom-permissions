@@ -6,15 +6,15 @@
         <field name="inherit_id" ref="crm.crm_lead_view_form"/>
         <field name="arch" type="xml">
             <xpath expr="//notebook" position="inside">
-                <page string="Datos del Prospecto" name="prospect_page">
+                <page string="Prospect Details" name="prospect_page">
                     <group>
-                        <group string="Contacto del Prospecto">
+                        <group string="Prospect Contact">
                             <field name="x_prospect_name"/>
                             <field name="x_prospect_phone"/>
                             <field name="x_prospect_mobile"/>
                             <field name="x_prospect_email"/>
                         </group>
-                        <group string="Ubicación y Notas">
+                        <group string="Location &amp; Notes">
                             <field name="x_prospect_street"/>
                             <field name="x_prospect_city"/>
                             <field name="x_prospect_notes"/>

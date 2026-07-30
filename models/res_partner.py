@@ -6,9 +6,9 @@ class ResPartner(models.Model):
     _inherit = 'res.partner'
 
     x_is_lead_prospect = fields.Boolean(
-        string="Es Prospecto (Cliente-Lead)",
+        string="Is Prospect (Lead-Client)",
         default=False,
-        help="Indica si este contacto es un prospecto de lead y no un cliente comprador."
+        help="Indicates whether this contact is a lead prospect rather than a buyer customer."
     )
 
     @api.model

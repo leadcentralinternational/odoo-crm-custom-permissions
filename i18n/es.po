@@ -15,68 +15,118 @@ msgstr ""
 "Language: es\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#. module: crm_custom_permissions
+#. module: odoo-crm-custom-permissions
 #: code:addons/crm_custom_permissions/models/crm_lead.py:0
 #, python-format
 msgid "Permission denied. Please contact your administrator."
 msgstr "Permiso denegado. Comuníquese con el administrador."
 
-#. module: crm_custom_permissions
-#: model:ir.model.fields,field_description:crm_custom_permissions.field_res_users__crm_custom_permissions_enabled
+#. module: odoo-crm-custom-permissions
+#: model:ir.model.fields,field_description:odoo-crm-custom-permissions.field_res_users__crm_custom_permissions_enabled
 msgid "Enable Custom CRM Permissions"
 msgstr "Activar Permisos CRM Personalizados"
 
-#. module: crm_custom_permissions
-#: model:ir.model.fields,field_description:crm_custom_permissions.field_res_users__crm_lead_view_rule
+#. module: odoo-crm-custom-permissions
+#: model:ir.model.fields,field_description:odoo-crm-custom-permissions.field_res_users__crm_lead_view_rule
 msgid "Lead Visibility Level"
 msgstr "Nivel de Visibilidad de Leads"
 
-#. module: crm_custom_permissions
-#: model:ir.model.fields,field_description:crm_custom_permissions.field_res_users__crm_lead_can_edit
+#. module: odoo-crm-custom-permissions
+#: model:ir.model.fields,field_description:odoo-crm-custom-permissions.field_res_users__crm_lead_can_edit
 msgid "Can Edit CRM Leads"
 msgstr "Puede Editar Leads de CRM"
 
-#. module: crm_custom_permissions
-#: model:ir.model.fields,field_description:crm_custom_permissions.field_res_users__crm_lead_can_delete
+#. module: odoo-crm-custom-permissions
+#: model:ir.model.fields,field_description:odoo-crm-custom-permissions.field_res_users__crm_lead_can_delete
 msgid "Can Delete CRM Leads"
 msgstr "Puede Eliminar Leads de CRM"
 
-#. module: crm_custom_permissions
-#: model:ir.model.fields,field_description:crm_custom_permissions.field_res_users__crm_can_create_stages
+#. module: odoo-crm-custom-permissions
+#: model:ir.model.fields,field_description:odoo-crm-custom-permissions.field_res_users__crm_can_create_stages
 msgid "Can Create Stages"
 msgstr "Puede Crear Etapas"
 
-#. module: crm_custom_permissions
-#: model:ir.model.fields,field_description:crm_custom_permissions.field_res_users__crm_allowed_stage_ids
+#. module: odoo-crm-custom-permissions
+#: model:ir.model.fields,field_description:odoo-crm-custom-permissions.field_res_users__crm_allowed_stage_ids
 msgid "Allowed CRM Stages"
 msgstr "Etapas de CRM Permitidas"
 
-#. module: crm_custom_permissions
-#: model:ir.model.fields,field_description:crm_custom_permissions.field_res_users__crm_admin_options_enabled
+#. module: odoo-crm-custom-permissions
+#: model:ir.model.fields,field_description:odoo-crm-custom-permissions.field_res_users__crm_admin_options_enabled
 msgid "Admin Options"
 msgstr "Opciones de administrador"
 
-#. module: crm_custom_permissions
-#: model:ir.model.fields,field_description:crm_custom_permissions.field_res_users__crm_show_menu_sales
+#. module: odoo-crm-custom-permissions
+#: model:ir.model.fields,field_description:odoo-crm-custom-permissions.field_res_users__crm_show_menu_sales
 msgid "Sales"
 msgstr "Ventas"
 
-#. module: crm_custom_permissions
-#: model:ir.model.fields,field_description:crm_custom_permissions.field_res_users__crm_show_menu_report
+#. module: odoo-crm-custom-permissions
+#: model:ir.model.fields,field_description:odoo-crm-custom-permissions.field_res_users__crm_show_menu_report
 msgid "Reporting"
 msgstr "Informes"
 
-#. module: crm_custom_permissions
-#: model:ir.model.fields,field_description:crm_custom_permissions.field_res_users__crm_show_menu_config
+#. module: odoo-crm-custom-permissions
+#: model:ir.model.fields,field_description:odoo-crm-custom-permissions.field_res_users__crm_show_menu_config
 msgid "Configuration"
 msgstr "Configuración"
 
-#. module: crm_custom_permissions
-#: model:ir.model.fields,field_description:crm_custom_permissions.field_crm_stage__send_email_on_entry
+#. module: odoo-crm-custom-permissions
+#: model:ir.model.fields,field_description:odoo-crm-custom-permissions.field_crm_stage__send_email_on_entry
 msgid "Send Email to Client"
 msgstr "Enviar correo automático al cliente"
 
-#. module: crm_custom_permissions
-#: model:ir.model.fields,field_description:crm_custom_permissions.field_crm_stage__email_template_id
+#. module: odoo-crm-custom-permissions
+#: model:ir.model.fields,field_description:odoo-crm-custom-permissions.field_crm_stage__email_template_id
 msgid "Email Template"
 msgstr "Plantilla de correo"
+
+#. module: odoo-crm-custom-permissions
+#: model:ir.model.fields,field_description:odoo-crm-custom-permissions.field_crm_lead__x_prospect_name
+msgid "Prospect Name"
+msgstr "Nombre del Prospecto"
+
+#. module: odoo-crm-custom-permissions
+#: model:ir.model.fields,field_description:odoo-crm-custom-permissions.field_crm_lead__x_prospect_phone
+msgid "Phone"
+msgstr "Teléfono"
+
+#. module: odoo-crm-custom-permissions
+#: model:ir.model.fields,field_description:odoo-crm-custom-permissions.field_crm_lead__x_prospect_mobile
+msgid "Mobile"
+msgstr "Celular"
+
+#. module: odoo-crm-custom-permissions
+#: model:ir.model.fields,field_description:odoo-crm-custom-permissions.field_crm_lead__x_prospect_email
+msgid "Email"
+msgstr "Correo Electrónico"
+
+#. module: odoo-crm-custom-permissions
+#: model:ir.model.fields,field_description:odoo-crm-custom-permissions.field_crm_lead__x_prospect_street
+msgid "Address"
+msgstr "Dirección"
+
+#. module: odoo-crm-custom-permissions
+#: model:ir.model.fields,field_description:odoo-crm-custom-permissions.field_crm_lead__x_prospect_city
+msgid "City"
+msgstr "Ciudad"
+
+#. module: odoo-crm-custom-permissions
+#: model:ir.model.fields,field_description:odoo-crm-custom-permissions.field_crm_lead__x_prospect_notes
+msgid "Prospect Notes"
+msgstr "Notas del Prospecto"
+
+#. module: odoo-crm-custom-permissions
+#: model:ir.ui.view,arch_db:odoo-crm-custom-permissions.crm_lead_view_form_inherit_custom_prospect
+msgid "Prospect Details"
+msgstr "Datos del Prospecto"
+
+#. module: odoo-crm-custom-permissions
+#: model:ir.ui.view,arch_db:odoo-crm-custom-permissions.crm_lead_view_form_inherit_custom_prospect
+msgid "Prospect Contact"
+msgstr "Contacto del Prospecto"
+
+#. module: odoo-crm-custom-permissions
+#: model:ir.ui.view,arch_db:odoo-crm-custom-permissions.crm_lead_view_form_inherit_custom_prospect
+msgid "Location & Notes"
+msgstr "Ubicación y Notas"
