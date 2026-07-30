@@ -17,6 +17,30 @@ class CrmLead(models.Model):
     x_prospect_city = fields.Char(string="City")
     x_prospect_notes = fields.Text(string="Prospect Notes")
 
+    def _sync_prospect_partner(self):
+        for lead in self:
+            prospect_name = lead.x_prospect_name
+            if not prospect_name and not (lead.x_prospect_phone or lead.x_prospect_email):
+                continue
+            
+            partner_name = prospect_name or lead.name
+            partner_vals = {
+                'name': partner_name,
+                'phone': lead.x_prospect_phone or False,
+                'mobile': lead.x_prospect_mobile or False,
+                'email': lead.x_prospect_email or False,
+                'street': lead.x_prospect_street or False,
+                'city': lead.x_prospect_city or False,
+                'comment': lead.x_prospect_notes or False,
+                'x_is_lead_prospect': True,
+            }
+
+            if lead.partner_id:
+                lead.partner_id.sudo().write(partner_vals)
+            else:
+                partner = self.env['res.partner'].sudo().create(partner_vals)
+                lead.sudo().write({'partner_id': partner.id})
+
     @api.model
     def _get_view_cache_key(self, view_id=None, view_type='form', **options):
         key = super()._get_view_cache_key(view_id=view_id, view_type=view_type, **options)
@@ -67,7 +91,6 @@ class CrmLead(models.Model):
             if user.crm_lead_view_rule == 'own':
                 custom_domain = ['|', ('user_id', '=', user.id), ('create_uid', '=', user.id)]
             elif user.crm_lead_view_rule == 'team':
-                # Allow leads belonging to user's assigned teams OR leads they are responsible for/created
                 user_teams = self.env['crm.team'].search(['|', ('user_id', '=', user.id), ('member_ids', 'in', [user.id])])
                 custom_domain = [
                     '|', ('team_id', 'in', user_teams.ids),
@@ -111,6 +134,10 @@ class CrmLead(models.Model):
                     
         res = super().write(vals)
 
+        prospect_fields = {'x_prospect_name', 'x_prospect_phone', 'x_prospect_mobile', 'x_prospect_email', 'x_prospect_street', 'x_prospect_city', 'x_prospect_notes'}
+        if prospect_fields.intersection(vals.keys()):
+            self._sync_prospect_partner()
+
         # Trigger stage change emails
         if 'stage_id' in vals:
             for lead in self:
@@ -136,6 +163,7 @@ class CrmLead(models.Model):
                         raise UserError(_("Permission denied. Please contact your administrator."))
                         
         leads = super().create(vals_list)
+        leads._sync_prospect_partner()
 
         # Trigger stage change emails on creation
         for lead in leads:
