@@ -12,6 +12,17 @@ class ResPartner(models.Model):
     )
 
     @api.model
+    def _get_view(self, view_id=None, view_type='form', **options):
+        arch, view = super()._get_view(view_id=view_id, view_type=view_type, **options)
+        user = self.env.user
+        if user.crm_custom_permissions_enabled and not user.has_group('base.group_system'):
+            if view_type == 'form':
+                # Hide sensitive contact fields and tabs for restricted users
+                for node in arch.xpath("//page[@name='sales_purchases'] | //page[@name='contact_addresses'] | //field[@name='email'] | //field[@name='phone'] | //field[@name='mobile'] | //field[@name='street'] | //field[@name='street2']"):
+                    node.set('invisible', '1')
+        return arch, view
+
+    @api.model
     def _search(self, domain, offset=0, limit=None, order=None, **kwargs):
         user = self.env.user
         # Do not restrict superuser/admin or users without custom permissions
