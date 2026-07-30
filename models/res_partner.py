@@ -17,7 +17,17 @@ class ResPartner(models.Model):
         # Do not restrict superuser/admin or users without custom permissions
         if not self.env.su and user.crm_custom_permissions_enabled and not user.has_group('base.group_system'):
             if not self.env.context.get('skip_custom_crm_filter'):
+                # Base allowed partners: user's partner and company partner
                 allowed_partner_ids = list(filter(None, [user.partner_id.id, user.company_id.partner_id.id]))
+                
+                # Also allow partners linked to any CRM lead so record loading doesn't throw Access Error
+                try:
+                    leads_sudo = self.env['crm.lead'].sudo().search([])
+                    lead_partners = leads_sudo.mapped('partner_id').ids
+                    allowed_partner_ids.extend(lead_partners)
+                except Exception:
+                    pass
+
                 prospect_domain = [
                     '|', ('x_is_lead_prospect', '=', True),
                     '|', ('id', 'in', allowed_partner_ids),
