@@ -1,4 +1,14 @@
 /* Disable chatter author popovers and partner links for restricted users */
+html.o_crm_custom_permissions_restricted .o-mail-Message-author,
+html.o_crm_custom_permissions_restricted .o-mail-Message-avatar,
+html.o_crm_custom_permissions_restricted .o-mail-Message-authorName,
+html.o_crm_custom_permissions_restricted .o_author_card,
+html.o_crm_custom_permissions_restricted .o_popover_author,
+html.o_crm_custom_permissions_restricted .o_Chatter_authorCardPopover,
+html.o_crm_custom_permissions_restricted .o_avatar_card,
+html.o_crm_custom_permissions_restricted .o_avatar_card_popover,
+html.o_crm_custom_permissions_restricted .o-mail-AvatarCardPopover,
+html.o_crm_custom_permissions_restricted [data-oe-model="res.partner"],
 body.o_crm_custom_permissions_restricted .o-mail-Message-author,
 body.o_crm_custom_permissions_restricted .o-mail-Message-avatar,
 body.o_crm_custom_permissions_restricted .o-mail-Message-authorName,
@@ -13,14 +23,23 @@ body.o_crm_custom_permissions_restricted [data-oe-model="res.partner"] {
     cursor: default !important;
 }
 
-/* Hide any popover or avatar card that gets created */
+/* Completely hide any popover or avatar card */
+html.o_crm_custom_permissions_restricted .o_avatar_card,
+html.o_crm_custom_permissions_restricted .o_avatar_card_popover,
+html.o_crm_custom_permissions_restricted .o-mail-AvatarCardPopover,
+html.o_crm_custom_permissions_restricted .o_popover_author,
+html.o_crm_custom_permissions_restricted .o_Chatter_authorCardPopover,
+html.o_crm_custom_permissions_restricted div[class*="AvatarCard"],
+html.o_crm_custom_permissions_restricted div[class*="avatar_card"],
+html.o_crm_custom_permissions_restricted .popover,
 body.o_crm_custom_permissions_restricted .o_avatar_card,
 body.o_crm_custom_permissions_restricted .o_avatar_card_popover,
 body.o_crm_custom_permissions_restricted .o-mail-AvatarCardPopover,
 body.o_crm_custom_permissions_restricted .o_popover_author,
 body.o_crm_custom_permissions_restricted .o_Chatter_authorCardPopover,
-body.o_crm_custom_permissions_restricted .popover:has(.o_avatar_card),
-body.o_crm_custom_permissions_restricted .popover:has(.o-mail-AvatarCardPopover) {
+body.o_crm_custom_permissions_restricted div[class*="AvatarCard"],
+body.o_crm_custom_permissions_restricted div[class*="avatar_card"],
+body.o_crm_custom_permissions_restricted .popover {
     display: none !important;
     visibility: hidden !important;
     opacity: 0 !important;
