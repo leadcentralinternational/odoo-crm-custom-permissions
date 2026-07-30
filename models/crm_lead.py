@@ -18,28 +18,10 @@ class CrmLead(models.Model):
     x_prospect_notes = fields.Text(string="Prospect Notes")
 
     def _sync_prospect_partner(self):
-        for lead in self:
-            prospect_name = lead.x_prospect_name
-            if not prospect_name and not (lead.x_prospect_phone or lead.x_prospect_email):
-                continue
-            
-            partner_name = prospect_name or lead.name
-            partner_vals = {
-                'name': partner_name,
-                'phone': lead.x_prospect_phone or False,
-                'mobile': lead.x_prospect_mobile or False,
-                'email': lead.x_prospect_email or False,
-                'street': lead.x_prospect_street or False,
-                'city': lead.x_prospect_city or False,
-                'comment': lead.x_prospect_notes or False,
-                'x_is_lead_prospect': True,
-            }
-
-            if lead.partner_id:
-                lead.partner_id.sudo().write(partner_vals)
-            else:
-                partner = self.env['res.partner'].sudo().create(partner_vals)
-                lead.sudo().write({'partner_id': partner.id})
+        # Do not automatically create or assign lead.partner_id from prospect details.
+        # partner_id represents the Cliente Comprador / Portal Client and should remain
+        # unassigned until an Administrator manually selects a buyer partner.
+        pass
 
     @api.model
     def _get_view_cache_key(self, view_id=None, view_type='form', **options):
