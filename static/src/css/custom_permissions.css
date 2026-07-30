@@ -1,0 +1,15 @@
+/* Disable chatter author popovers and partner links for restricted users */
+body.o_crm_custom_permissions_restricted .o-mail-Message-author,
+body.o_crm_custom_permissions_restricted .o_author_card,
+body.o_crm_custom_permissions_restricted .o_popover_author,
+body.o_crm_custom_permissions_restricted .o_Chatter_authorCardPopover,
+body.o_crm_custom_permissions_restricted [data-oe-model="res.partner"] {
+    pointer-events: none !important;
+    cursor: default !important;
+}
+
+body.o_crm_custom_permissions_restricted .o_popover,
+body.o_crm_custom_permissions_restricted .o_Chatter_authorCardPopover,
+body.o_crm_custom_permissions_restricted .popover {
+    display: none !important;
+}

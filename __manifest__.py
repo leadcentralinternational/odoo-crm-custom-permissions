@@ -12,7 +12,14 @@ Módulo de Odoo para configurar de forma granular y dinámica los permisos de CR
     'data': [
         'views/res_users_views.xml',
         'views/crm_stage_views.xml',
+        'views/crm_lead_views.xml',
     ],
+    'assets': {
+        'web.assets_backend': [
+            'odoo-crm-custom-permissions/static/src/css/custom_permissions.css',
+            'odoo-crm-custom-permissions/static/src/js/custom_permissions.js',
+        ],
+    },
     'installable': True,
     'application': False,
     'auto_install': False,

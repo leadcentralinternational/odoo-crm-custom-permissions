@@ -9,6 +9,14 @@ _logger = logging.getLogger(__name__)
 class CrmLead(models.Model):
     _inherit = 'crm.lead'
 
+    x_prospect_name = fields.Char(string="Nombre del Prospecto")
+    x_prospect_phone = fields.Char(string="Teléfono")
+    x_prospect_mobile = fields.Char(string="Celular")
+    x_prospect_email = fields.Char(string="Correo Electrónico")
+    x_prospect_street = fields.Char(string="Dirección")
+    x_prospect_city = fields.Char(string="Ciudad")
+    x_prospect_notes = fields.Text(string="Notas del Prospecto")
+
     @api.model
     def _get_view_cache_key(self, view_id=None, view_type='form', **options):
         key = super()._get_view_cache_key(view_id=view_id, view_type=view_type, **options)
@@ -42,6 +50,12 @@ class CrmLead(models.Model):
                         h2.set('invisible', '1')
                 for node in arch.xpath("//div[@id='probability'] | //button[@name='action_set_automated_probability']"):
                     node.set('invisible', '1')
+
+                # Hide non-prospect tabs (e.g. Extra Information) for restricted users
+                for page in arch.xpath("//page"):
+                    page_name = page.get('name')
+                    if page_name and page_name not in ('prospect_page', 'internal_notes'):
+                        page.set('invisible', '1')
         return arch, view
 
     @api.model

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="crm_lead_view_form_inherit_custom_prospect" model="ir.ui.view">
+        <field name="name">crm.lead.form.inherit.custom.prospect</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Datos del Prospecto" name="prospect_page">
+                    <group>
+                        <group string="Contacto del Prospecto">
+                            <field name="x_prospect_name"/>
+                            <field name="x_prospect_phone"/>
+                            <field name="x_prospect_mobile"/>
+                            <field name="x_prospect_email"/>
+                        </group>
+                        <group string="Ubicación y Notas">
+                            <field name="x_prospect_street"/>
+                            <field name="x_prospect_city"/>
+                            <field name="x_prospect_notes"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

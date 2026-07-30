@@ -27,6 +27,19 @@ class IrUiMenu(models.Model):
 
             menu_env = self.with_context(skip_custom_crm_filter=True)
 
+            # 2. Hide Apps and Dashboards root menus
+            apps_menu = self.env.ref('base.menu_management', raise_if_not_found=False)
+            if apps_menu:
+                exclude_menus |= apps_menu
+            
+            # Find any root menu for Dashboards or Apps by name / parent_id=False
+            root_extra_menus = menu_env.search([
+                ('parent_id', '=', False),
+                '|', ('name', 'ilike', 'Dashboard'),
+                ('name', 'ilike', 'Apps')
+            ])
+            exclude_menus |= root_extra_menus
+
             # 2. Check CRM submenus based on Admin Options
             if user.crm_admin_options_enabled:
                 if crm_report_menu and not user.crm_show_menu_report:

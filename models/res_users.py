@@ -89,3 +89,10 @@ class ResUsers(models.Model):
             self._ensure_crm_base_group(vals)
         return res
 
+    def _compute_session_info(self):
+        session_info = super()._compute_session_info()
+        session_info['crm_custom_permissions_enabled'] = bool(
+            self.crm_custom_permissions_enabled and not self.has_group('base.group_system')
+        )
+        return session_info
+
