@@ -28,21 +28,17 @@ class ResPartner(models.Model):
         # Do not restrict superuser/admin or users without custom permissions
         if not self.env.su and user.crm_custom_permissions_enabled and not user.has_group('base.group_system'):
             if not self.env.context.get('skip_custom_crm_filter'):
-                # Base allowed partners: user's partner and company partner
-                allowed_partner_ids = list(filter(None, [user.partner_id.id, user.company_id.partner_id.id]))
-                
-                # Also allow partners linked to any CRM lead so record loading doesn't throw Access Error
-                try:
-                    leads_sudo = self.env['crm.lead'].sudo().search([])
-                    lead_partners = leads_sudo.mapped('partner_id').ids
-                    allowed_partner_ids.extend(lead_partners)
-                except Exception:
-                    pass
+                # Check if this search is querying specific record IDs (e.g. reading partner_id of a crm.lead)
+                has_id_filter = False
+                if domain:
+                    for leaf in domain:
+                        if isinstance(leaf, (list, tuple)) and len(leaf) == 3 and leaf[0] == 'id':
+                            has_id_filter = True
+                            break
 
-                prospect_domain = [
-                    '|', ('x_is_lead_prospect', '=', True),
-                    '|', ('id', 'in', allowed_partner_ids),
-                    ('user_ids', '!=', False)
-                ]
-                domain = expression.AND([domain, prospect_domain])
+                # When listing/browsing contacts in Contacts app, restrict strictly to prospect contacts
+                if not has_id_filter:
+                    prospect_domain = [('x_is_lead_prospect', '=', True)]
+                    domain = expression.AND([domain, prospect_domain])
+
         return super()._search(domain, offset=offset, limit=limit, order=order, **kwargs)
