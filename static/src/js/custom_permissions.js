@@ -14,7 +14,6 @@ function addRestrictedClass() {
     }
 }
 
-// Execute safely when script loads
 addRestrictedClass();
 
 if (document.readyState === "loading") {
@@ -30,10 +29,13 @@ const crmCustomPermissionsService = {
 
         addRestrictedClass();
 
-        // Safe capturing-phase listener on window to block clicks and hovers on author/avatar elements
-        const blockSelector = ".o-mail-Message-author, .o-mail-Message-avatar, .o-mail-Message-authorName, .o_author_card, .o_popover_author, .o_avatar_card, .o_avatar_card_popover, .o-mail-AvatarCardPopover, [data-oe-model='res.partner'], div[class*='AvatarCard']";
+        const blockSelector = ".o-mail-Message-author, .o-mail-Message-avatar, .o-mail-Message-authorName, .o_author_card, .o_popover_author, .o_avatar_card, .o_avatar_card_popover, .o-mail-AvatarCardPopover, div[class*='AvatarCard']";
 
         window.addEventListener("click", (ev) => {
+            // Never block interactions in the main navbar or user menu at top right
+            if (ev.target.closest(".o_main_navbar, .o_user_menu")) {
+                return;
+            }
             const target = ev.target.closest(blockSelector);
             if (target) {
                 ev.preventDefault();
@@ -43,6 +45,9 @@ const crmCustomPermissionsService = {
         }, true);
 
         window.addEventListener("mouseover", (ev) => {
+            if (ev.target.closest(".o_main_navbar, .o_user_menu")) {
+                return;
+            }
             const target = ev.target.closest(blockSelector);
             if (target) {
                 ev.preventDefault();
